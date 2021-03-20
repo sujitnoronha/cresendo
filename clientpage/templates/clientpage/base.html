@@ -87,6 +87,24 @@ function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
 }
 </script>
+<script type="text/javascript">
+      var $zoho = $zoho || {}
+      $zoho.salesiq = $zoho.salesiq || {
+        widgetcode:
+          'b60738c3fc9b8c9a33036d6dc960390cdb587dab210bf45dce33d2cf0f6a4026',
+        values: {},
+        ready: function () {},
+      }
+      var d = document
+      s = d.createElement('script')
+      s.type = 'text/javascript'
+      s.id = 'zsiqscript'
+      s.defer = true
+      s.src = 'https://salesiq.zoho.in/widget'
+      t = d.getElementsByTagName('script')[0]
+      t.parentNode.insertBefore(s, t)
+      d.write("<div id='zsiqwidget'></div>")
+    </script>
 
 </body>
 </html>

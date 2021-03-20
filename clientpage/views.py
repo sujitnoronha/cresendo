@@ -10,16 +10,20 @@ from clientpage.serializers import DriveSerializer
 from clientpage.forms import * 
 from django.contrib import messages
 from PIL import Image
+from textblob import TextBlob
+
         
 
 from geopy.distance import geodesic
 
 # Create your views here.
 def home(request):
-    drive = Locations.objects.all()
+    drive = Locations.objects.filter(locationtype="tourist").order_by('FOMO')
+    rest = Locations.objects.filter(locationtype="resteraunt").order_by('FOMO')    
     context = {
-        #'apikey' : 'AIzaSyCYUeS2YnGYNzt9kZRc1p-4tt4IyEacsjY',
+        'apikey' : 'AIzaSyCYUeS2YnGYNzt9kZRc1p-4tt4IyEacsjY',
         'drives': drive,
+        'rest': rest,
     }
     return render(request,'clientpage/home.html',context)
 
@@ -35,18 +39,26 @@ def drivedonation(request, id):
 
     if request.method == "POST":
         comment = request.POST['comment']
+        rating = request.POST['rating']
         pred = predict_prob([comment])
         print('hateval',pred)
         if pred[0] > 0.5:
             messages.info(request, 'Hate-speech detected! Please keep the comments clean')
             return render(request,'clientpage/profile.html',context)
-        
+
         form = CommentForm(request.POST)
+
         print(form.is_valid())
         if form.is_valid():
             com = form.save(commit=False)
             com.location = drive
             com.save()
+            blob = TextBlob(comment)
+            polar = blob.sentences[0].sentiment.polarity
+            print(polar)
+            if polar < 0:
+                drive.FOMO = drive.FOMO - (10 - (polar + rating))
+                drive.save() 
             messages.info(request, 'Posted successfully')
             return render(request,'clientpage/profile.html',context)
 
@@ -93,7 +105,7 @@ def appointmentview(request,id):
     form = appointForm()
     context = {
         "drive" : drive,
-        "form":form,
+        "form" : form,
     }
     if request.method == "POST":
         print(request.POST)

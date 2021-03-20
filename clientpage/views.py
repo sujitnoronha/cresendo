@@ -27,14 +27,18 @@ def home(request):
     }
     return render(request,'clientpage/home.html',context)
 
+
 def test(request):
     return render(request, 'clientpage/new.html')
+
 
 #detail view for drive donation
 def drivedonation(request, id):
     drive = Locations.objects.get(id=id)
+    comments = CommentsField.objects.filter(location = drive).order_by('-id')
     context = {
         "drive" : drive,
+        "comments": comments,
     }
 
     if request.method == "POST":
@@ -55,15 +59,15 @@ def drivedonation(request, id):
             com.save()
             blob = TextBlob(comment)
             polar = blob.sentences[0].sentiment.polarity
-            print(polar)
+            print("sentiment",polar)
             if polar < 0:
                 drive.FOMO = drive.FOMO - (10 - (polar + rating))
+                print("fomoscore",drive.FOMO)
                 drive.save() 
             messages.info(request, 'Posted successfully')
             return render(request,'clientpage/profile.html',context)
 
     return render(request,'clientpage/profile.html',context)
-
 
 
 @api_view(['POST'])

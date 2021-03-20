@@ -1,0 +1,351 @@
+{% extends 'clientpage/base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<style type="text/css">
+      .bgimg-2{
+            background-position: center;
+            background-size: cover;
+            min-height: 400px;
+            background-attachment:fixed;
+            background-image:url('{% static 'clientpage/holi.jpg' %}');
+        }
+
+  .swiper-container {
+      width: 100%;
+    }
+
+
+    .swiper-slide {
+      background-position: center;
+      background-size: cover;
+    }
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+      }
+
+      /* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+    </style>
+<script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        const uluru = { lat: 19.187229, lng: 72.840747 };
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 14,
+          center: uluru,
+        });
+        // The marker, positioned at Uluru
+       
+
+        {% for e in drives %}
+            const contentString{{ forloop.counter }} =
+    '<div id="w3-card-4 w3-container w3-padding w3-round-large">' +
+    '<p class="w3-large " style="font-weight:bold;">{{ e.name }}</p>'+
+    '<p class="w3-small">{{ e.address }}</p>'
+    
+    "</div>";
+             const infowindow{{ forloop.counter }} = new google.maps.InfoWindow({
+                    content: contentString{{ forloop.counter }},
+                });
+
+
+            const marker{{ forloop.counter }} = new google.maps.Marker({
+                position: { lat:{{ e.latitude|safe }}, lng: {{ e.longitude|safe }}},
+                map: map,
+                title: "{{e.name}}",
+            });
+            marker{{forloop.counter}}.addListener("click", () => {
+        infowindow{{forloop.counter}}.open(map, marker{{forloop.counter}});
+  });
+        {% endfor %}
+
+      }
+
+</script>
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <img src="" class="w3-circle w3-margin-right" style="width:46px">
+    </div>
+    
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Dashboard</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Overview</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map-marker fa-fw"></i>  All Donation Drives</a>
+    
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
+  </div>
+</nav>
+
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+<div class="w3-panel w3-padding-32">
+    <div class="w3-row-padding" style="margin:0 -16px">
+      <div class="w3-half">
+        <h5>Best Spots For you</h5>
+        <div id="map"></div>
+      </div>
+      <div class="w3-half" id="vueapp">
+        <div>
+        <br>
+        <h5>Near You</h5>
+        <br>
+        <table class="w3-table w3-card-4 w3-round-large w3-white"  style="margin-right:12px;margin-bottom:20px;">
+          <div v-if="details">
+            <div v-for="inf in info">
+                <tr>
+                    <td><i class="fa fa-user w3-large"></i></td>
+                    <td>[[ inf.driveinfo.name ]]</td>
+                    <td><i>[[ inf.distance ]] kms</i></td>
+                </tr>
+            </div>
+                </div>
+          <div v-else>
+            
+            <p> Enable geolocation to get details</p>
+
+          </div>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="w3-display-container w3-padding-32 bgimg-2"> 
+</div>
+<br>
+  <div class="w3-container">
+    <a href="{% url 'liveenquiry' %}" class="w3-button w3-xlarge w3-purple w3-block">Help Desk</a>
+  </div>
+
+    <div class="w3-container w3-padding-16">
+    
+    <div class="swiper-container swiper-con">
+    <h1 class="w3-large">Suggested Locations</h1>
+    <div class="swiper-wrapper">
+
+            
+    {% for d in drives %}
+    <div class="swiper-slide">
+    <div class="w3-card-4 w3-white w3-round-large w3-padding-16" style="margin:20px;">
+        <div class="w3-row-padding">
+            <div class="w3-third w3-center" style="text-align:left;">
+                <img class="w3-image w3-circle w3-responsive" style="width:200px; height:200px;margin:auto;" src="{{ d.image.url }}">
+            </div>
+            <div class="w3-twothird">
+            <div class="w3-container">
+            <p class="w3-large">{{ d.name|truncatechars:40 }}</p>
+            <p class='w3-small'>{{ d.description| truncatechars:100}}</p>
+            <p>{{ d.address }}</p>
+            <a href="{{ d.get_absolute_url }}" class="w3-button w3-purple">Visit {{ d.name| truncatechars:20 }}</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+    </div>
+        <div class="swiper-pagination"></div>
+
+    </div>
+    </div>
+
+
+        <div class="w3-container w3-padding-16">
+    
+    <div class="swiper-container swiper-res">
+    <h1 class="w3-large">Best restaurants near you</h1>
+    <div class="swiper-wrapper">
+            
+    {% for d in drives %}
+    <div class="swiper-slide">
+    <div class="w3-card-4 w3-white w3-round-large w3-padding-16" style="margin:20px;height:350px;">
+        <div class="w3-row-padding">
+            <div class="w3-third w3-center" style="text-align:left;">
+                <img class="w3-image w3-circle w3-responsive" style="width:200px; height:200px;margin:auto;" src="{{ d.image.url }}">
+            </div>
+            <div class="w3-twothird">
+            <div class="w3-container">
+            <p class="w3-large">{{ d.name|truncatechars:40 }}</p>
+            <a href="{{ d.get_absolute_url }}" class="w3-button w3-purple">Visit {{ d.name| truncatechars:20 }}</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+    </div>
+        <div class="swiper-pagination"></div>
+
+    </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+
+<script>
+
+var app = new Vue({
+  delimiters: ["[[", "]]"],
+  el: '#vueapp',
+    data: {
+        info: [],
+        details: false,
+  },
+    mounted() {
+            if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                };
+    
+                console.log(pos)
+                axios.post('locations/',
+                {"latitude": pos.lat, "longitude": pos.lng},
+                {
+                headers: {
+                    'X-CSRFTOKEN': csrftoken,
+                },
+                }
+                ).then(res => {
+                    console.log(res.data)
+
+                    this.details = true;
+
+                    this.info = res.data.data;
+                    console.log('complete')
+                })
+                }
+
+
+            )
+            }else {
+                alert('Browser does not support geolocation')
+            }
+        },
+   methods: {
+            
+
+                },
+    template:
+        `<div class="w3-half">
+    
+            <h5>Near You</h5>
+        <div class="w3-container w3-round-large w3-white" style="margin-right:12px;overflow-y:scroll;max-height:400px;">
+          <div v-if="details">
+            <br>
+            <div v-for="inf in info">
+                <div class="w3-container w3-padding-16 w3-card-4 w3-round-large w3-animate-top" style="width:300px;margin:auto;line-height:100%;">
+                    <div class="w3-center">
+                    <img :src="[[ inf.driveinfo.image ]]" style="border-radius:50%;margin:auto;height:150px;width:150px;">
+                    </div>
+                    <p>[[ inf.driveinfo.name ]]</p>
+                    <p class="w3-text-indigo" style='font-weight:bold;'><i>[[ inf.distance ]] kms away </i></p>
+                    <p>  <a :href="[[ inf.url ]]" class="w3-button w3-block w3-purple">Know More</a></p>
+
+                </div><br>
+               </div>
+
+               </div>
+          <div v-else>
+            
+            <p> Enable geolocation to get details</p>
+
+          </div>
+        </div>
+        </div>`
+         
+})
+
+</script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/603a6649385de407571aba50/1evi1v4g8';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+var swiper = new Swiper('.swiper-con', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    });
+
+
+var swiper = new Swiper('.swiper-res', {
+      effect: 'cube',
+      grabCursor: true,
+      
+      cubeEffect: {
+        shadow: true,
+        slideShadows: true,
+        shadowOffset: 20,
+        shadowScale: 0.94,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    });
+
+</script>
+<!--End of Tawk.to Script-->
+<script
+      src="https://maps.googleapis.com/maps/api/js?key={{ apikey }}&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+{% endblock %}

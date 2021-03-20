@@ -1,0 +1,125 @@
+{% extends 'clientpage/base.html' %}
+{% block content %}
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script>
+window.onload = function() {
+  var recaptcha = document.forms["myForm"]["g-recaptcha-response"];
+  recaptcha.required = true;
+  recaptcha.oninvalid = function(e) {
+    // do something
+    alert("Please complete the captcha");
+  }
+}
+</script>
+
+<style>
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.parallax{
+    background-image: url("{{ drive.image.url }}");
+    
+  min-height: 600px; 
+    background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+</style>
+
+   <div class="w3-display-container parallax">
+    <div class="w3-display-middle" style="background: rgba(255,255,255,0.8);">
+        <div class="w3-container">
+        <h1 class="w3-xlarge">{{ drive.name|upper}}</h1>
+        </div>
+    </div>
+    
+    </div>
+        <div class="w3-container w3-padding-32" style="margin:auto;max-width:800px;">
+        <p class='w3-large'>{{ drive.description }}</p>
+        <p class="w3-small">Mandatory Covid test required if visiting facility</p>
+    
+    </div>
+
+    <div class="w3-container w3-light-grey w3-padding-32">
+            <p class="w3-large"><i class="fa fa-map-marker"></i> {{ drive.address }} </p>
+        <a href="http://maps.google.com/maps?q=loc:{{ drive.latitude}},{{ drive.longitude }}&navigate=yes" class="w3-button w3-purple"> <i class="fa fa-paper-plane"></i> Navigate</a>
+    </div>
+    <div class="w3-container">
+    <h1 class="w3-large">Comments</h1>
+      <div class="w3-card w3-container w3-padding" style="line-height:100%;">
+        <p>This is a test comment</p>
+        <p class="w3-small w3-right">-Sujit</p>
+      </div>
+    <br>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="w3-container w3-padding-32">
+    <h1 class="w3-large">Post Comment</h1>
+      <form class="w3-form" method="POST">
+      {% csrf_token %}
+        <input type="text" name="comment" placeholder="Comment text" class="w3-input" required>
+        <br>
+        <input class="w3-large" style="width:100%;" type="range" id="myRange" name="rating" required default="8" min="0" max="10">
+        <p>Rate this Place: <span id="demo"></span>/10</p>
+        <br>
+        <div class="g-recaptcha" data-sitekey="6LfmjYcaAAAAAMoV-8qUl7JPpypHh-vE9uJGJ1yi"></div>
+        <br>
+        <input type="hidden" value="{{ user.id }}" name="user">
+        <button class="w3-button w3-blue" type="submit">POST</button>
+      </form>
+    </div>
+    {% endif %}
+<!--
+<script>
+  window.watsonAssistantChatOptions = {
+      integrationID: "4c29dd04-0a2f-44a5-9ee0-d0c137bfb581", // The ID of this integration.
+      region: "au-syd", // The region your integration is hosted in.
+      serviceInstanceID: "2c72cd20-35be-4c28-99a3-9e666abe13fd", // The ID of your service instance.
+      onLoad: function(instance) { instance.render(); }
+    };
+  setTimeout(function(){
+    const t=document.createElement('script');
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/loadWatsonAssistantChat.js";
+    document.head.appendChild(t);
+  });
+</script>
+-->
+<script>
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+</script>
+{% endblock %}

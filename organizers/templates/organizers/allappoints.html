@@ -1,0 +1,17 @@
+{% extends 'clientpage/base.html' %}
+
+{% block content %}
+    <div class="w3-content w3-container" style="margin-top:64px;">
+    {% if appointments|length == 0%}
+        <p class="w3-xlarge"> You have no appointments contact support and confirm if your account is VERIFIED.</p>
+    {% endif %}
+    {% for a in appointments %}
+        <div class="w3-card-4 w3-margin w3-padding w3-round-large">
+        <p class="w3-large">{{ a.name }}</p>
+        <p><i class="fa fa-phone"></i> {{ a.phonenumber }} <a target="_blank" href="https://wa.me/{{ a.phonenumber }}?text=Hey%20you%20have%20a%20appointment">Send Message</a></p>
+        <p>Message: {{ a.message }}</p>
+        </div>
+    {% endfor %}
+
+    </div>
+{% endblock %}

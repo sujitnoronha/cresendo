@@ -186,7 +186,7 @@
     <h1 class="w3-large">Best restaurants near you</h1>
     <div class="swiper-wrapper">
             
-    {% for d in drives %}
+    {% for d in rest %}
     <div class="swiper-slide">
     <div class="w3-card-4 w3-white w3-round-large w3-padding-16" style="margin:20px;height:350px;">
         <div class="w3-row-padding">
@@ -209,8 +209,57 @@
     </div>
     </div>
 
+    <div class="w3-container w3-padding-32 w3-margin">
+      <div class="swiper-container swiper-res">
+      <h2 class="w3-large">Cusines in your region</h2>
+      <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <a href="https://www.holidify.com/pages/maharashtra-food-1335.html">
+        <div class="w3-display-container" style="height:350px;width:300px;">
+          <img src="https://30stades.com/wp-content/uploads/2020/08/maharashtra-cuisine-thali-30stades.jpg" style="height:100%;width:100%;">
+          <div class="w3-display-middle" style="background: rgba(255,255,255,0.8);">
+        <div class="w3-container">
+        <h1 class="w3-large">Maharashtran Food</h1>
+        </div></div>
+        </a>
+      </div>
+  </div>
+      <div class="swiper-slide">
+        <a href="https://curlytales.com/5-places-to-get-the-best-gujarati-food-in-mumbai/">
+        <div class="w3-display-container" style="height:350px;width:300px;">
+          <img src="https://dynamic.tourtravelworld.com/blog_images/14-gujarati-dishes-that-you-must-try-when-you-visit-gujarat-20170927121204.jpg" style="height:100%;width:100%;">
+          <div class="w3-display-middle" style="background: rgba(255,255,255,0.8);">
+        <div class="w3-container">
+        <h1 class="w3-large">Gujrati Food</h1>
+        </div></div>
+        </a>
+      </div>
+  </div>
+  <div class="swiper-slide">
+        <a href="https://curlytales.com/10-best-south-indian-restaurants-in-mumbai-you-have-to-try-once/">
+        <div class="w3-display-container" style="height:350px;width:300px;">
+          <img src="https://miro.medium.com/max/1400/1*InlgltnGNwj7W93dJ_oQ_g.jpeg" style="height:100%;width:100%;">
+          <div class="w3-display-middle" style="background: rgba(255,255,255,0.8);">
+        <div class="w3-container">
+        <h1 class="w3-large">South Indian Food</h1>
+        </div></div>
+        </a>
+      </div>
+  </div>
+  <div class="swiper-slide">
+        <a href="https://www.travenix.com/punjabi-restaurants-in-mumbai/">
+        <div class="w3-display-container" style="height:350px;width:300px;">
+          <img src="https://imgmedia.lbb.in/media/2019/08/5d63b1f925d2a6920bfc1d11_1566814713943.jpg" style="height:100%;width:100%;">
+          <div class="w3-display-middle" style="background: rgba(255,255,255,0.8);">
+        <div class="w3-container">
+        <h1 class="w3-large">Pubjabi Food</h1>
+        </div></div>
+        </a>
+      </div>
+  </div>
+      </div>
 </div>
-
+</div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
 
@@ -268,7 +317,7 @@ var app = new Vue({
           <div v-if="details">
             <br>
             <div v-for="inf in info">
-                <div class="w3-container w3-padding-16 w3-card-4 w3-round-large w3-animate-top" style="width:300px;margin:auto;line-height:100%;">
+                <div class="w3-container w3-padding-16 w3-card-4 w3-round-large w3-animate-top" style="width:280px;margin:auto;line-height:100%;">
                     <div class="w3-center">
                     <img :src="[[ inf.driveinfo.image ]]" style="border-radius:50%;margin:auto;height:150px;width:150px;">
                     </div>
